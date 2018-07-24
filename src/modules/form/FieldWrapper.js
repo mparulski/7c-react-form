@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 
 const _getPropsAndHelpers = Symbol();
 
-export default class extends Component {
+export default class FieldWrapper extends Component {
+
+    static CLASS_NAME = 'FieldWrapper';
 
     static propTypes = {
-        fieldComponent: PropTypes.oneOfType([
-            PropTypes.element,
-            PropTypes.func
-        ]).isRequired,
+        children: PropTypes.func.isRequired,
         fieldId: PropTypes.string.isRequired,
+        handleBlur: PropTypes.func,
+        handleChange: PropTypes.func,
+        handleFocus: PropTypes.func,
         value: PropTypes.node
     };
 
@@ -18,40 +20,34 @@ export default class extends Component {
         value: ''
     };
 
-    constructor() {
-        super();
-
-        // onRegister
-    }
-
-    onBlur = () => {
-        const {fieldId, onBlur} = this.props;
-        onBlur(fieldId);
+    handleBlur = () => {
+        const {fieldId, handleBlur} = this.props;
+        handleBlur(fieldId);
     };
 
-    onChange = (event) => {
-        const {fieldId, onChange} = this.props;
-        onChange(fieldId, event);
+    handleChange = (event) => {
+        const {fieldId, handleChange} = this.props;
+        handleChange(fieldId, event);
     };
 
-    onFocus = () => {
-        const {fieldId, onBlur} = this.props;
-        onBlur(fieldId);
+    handleFocus = () => {
+        const {fieldId, handleFocus} = this.props;
+        handleFocus(fieldId);
     };
 
     render() {
-        const FieldComponent = this.props.fieldComponent;
-
-        return <FieldComponent {...this[_getPropsAndHelpers]()}/>
+        return this.props.children(this[_getPropsAndHelpers]())
     }
 
     [_getPropsAndHelpers]() {
+        const {fieldId, value} = this.props;
+
         return {
-            fieldId: this.props.fieldId,
-            onBlur: this.onBlur,
-            onChange: this.onChange,
-            onFocus: this.onFocus,
-            value: this.props.value
+            fieldId: fieldId,
+            handleBlur: this.handleBlur,
+            handleChange: this.handleChange,
+            handleFocus: this.handleFocus,
+            value: value
         }
     }
 }

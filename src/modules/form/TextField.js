@@ -1,10 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class extends Component {
-
-    render() {
-        const {onBlur, onChange, onFocus, value} = this.props;
-
-        return <input type="text" onBlur={onBlur} onChange={onChange} onFocus={onFocus} value={value}/>
-    }
+export default ({handleBlur, handleChange, handleFocus, value}) => {
+    return (
+        <input type="text" onBlur={handleBlur} onChange={handleChange} onFocus={handleFocus} value={value}/>
+    )
 }
